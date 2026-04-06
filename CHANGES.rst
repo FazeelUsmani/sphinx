@@ -73,6 +73,9 @@ Features added
   Dark mode automatically activates based on system preferences using the
   ``prefers-color-scheme`` media query.
   Patch by Fazeel Usmani.
+* Add :meth:`~sphinx.application.Sphinx.add_static_dir` for copying static
+  assets from extensions to the build output.
+  Patch by Jared Dillard
 
 Bugs fixed
 ----------
