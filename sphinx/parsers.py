@@ -36,24 +36,33 @@ class Parser(docutils.parsers.Parser):
 
     @property
     def config(self) -> Config:
-        """The config object."""
-        cls_module = self.__class__.__module__
-        cls_name = self.__class__.__qualname__
-        _deprecation_warning(cls_module, f'{cls_name}.config', remove=(10, 0))
+        """The config object.
+
+        Sphinx sets this attribute when constructing the parser via
+        :meth:`.Sphinx.add_source_parser`, so it is available throughout
+        :meth:`parse`.
+        """
         return self._config
 
     @property
     def env(self) -> BuildEnvironment:
-        """The environment object."""
-        cls_module = self.__class__.__module__
-        cls_name = self.__class__.__qualname__
-        _deprecation_warning(cls_module, f'{cls_name}.env', remove=(10, 0))
+        """The environment object.
+
+        Sphinx sets this attribute when constructing the parser via
+        :meth:`.Sphinx.add_source_parser`, so it is available throughout
+        :meth:`parse`.
+        """
         return self._env
 
     def set_application(self, app: Sphinx) -> None:
         """set_application will be called from Sphinx to set app and other instance variables
 
         :param sphinx.application.Sphinx app: Sphinx application object
+
+        .. versionchanged:: 9.0
+           Deprecated.  Sphinx now sets :attr:`_config` and :attr:`_env`
+           directly when the parser is created, so this hook is no longer
+           needed.  It will be removed in Sphinx 10.
         """
         cls_module = self.__class__.__module__
         cls_name = self.__class__.__qualname__

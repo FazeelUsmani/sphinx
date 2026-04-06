@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING
 from unittest.mock import Mock, patch
 
 import pytest
 
+from sphinx.deprecation import RemovedInSphinx10Warning
 from sphinx.parsers import RSTParser
 from sphinx.util.docutils import new_document
 
@@ -68,3 +70,16 @@ def test_RSTParser_prolog_epilog(RSTStateMachine: Mock, app: SphinxTestApp) -> N
         ('dummy.rst', 0, '        hello Sphinx world'),
         ('dummy.rst', 1, '  Sphinx is a document generator'),
     ]
+
+
+@pytest.mark.sphinx('html', testroot='basic')
+def test_parser_config_env_not_deprecated(app: SphinxTestApp) -> None:
+    """Reading ``Parser.config`` / ``Parser.env`` must not warn (#14371)."""
+    parser = RSTParser()
+    parser._config = app.config
+    parser._env = app.env
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('error', RemovedInSphinx10Warning)
+        assert parser.config is app.config
+        assert parser.env is app.env
