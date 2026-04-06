@@ -42,10 +42,10 @@ Accessing the Sphinx config and environment
 
 A custom parser can read Sphinx :class:`~sphinx.config.Config` values and the
 :class:`~sphinx.environment.BuildEnvironment` through the inherited
-:attr:`Parser.config` and :attr:`Parser.env` properties.  Sphinx sets the
-backing ``_config`` and ``_env`` attributes when it constructs the parser via
+``Parser.config`` and ``Parser.env`` properties.  Sphinx sets the backing
+``_config`` and ``_env`` attributes when it constructs the parser via
 :meth:`.Sphinx.add_source_parser`, so they are available from the moment
-:meth:`Parser.parse` is called.
+``parse()`` is called.
 
 .. code-block:: python
 
@@ -62,7 +62,7 @@ backing ``_config`` and ``_env`` attributes when it constructs the parser via
            ...
 
 .. versionchanged:: 9.0
-   The :meth:`Parser.set_application` hook is deprecated.  Sphinx now sets
+   The ``Parser.set_application`` hook is deprecated.  Sphinx now sets
    ``_config`` and ``_env`` directly when the parser instance is created, so
    custom parsers no longer need to override ``set_application`` to capture
    these objects.

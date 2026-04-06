@@ -40,7 +40,7 @@ class Parser(docutils.parsers.Parser):
 
         Sphinx sets this attribute when constructing the parser via
         :meth:`.Sphinx.add_source_parser`, so it is available throughout
-        :meth:`parse`.
+        ``parse()``.
         """
         return self._config
 
@@ -50,7 +50,7 @@ class Parser(docutils.parsers.Parser):
 
         Sphinx sets this attribute when constructing the parser via
         :meth:`.Sphinx.add_source_parser`, so it is available throughout
-        :meth:`parse`.
+        ``parse()``.
         """
         return self._env
 
@@ -60,9 +60,9 @@ class Parser(docutils.parsers.Parser):
         :param sphinx.application.Sphinx app: Sphinx application object
 
         .. versionchanged:: 9.0
-           Deprecated.  Sphinx now sets :attr:`_config` and :attr:`_env`
-           directly when the parser is created, so this hook is no longer
-           needed.  It will be removed in Sphinx 10.
+           Deprecated.  Sphinx now sets ``_config`` and ``_env`` directly
+           when the parser is created, so this hook is no longer needed.
+           It will be removed in Sphinx 10.
         """
         cls_module = self.__class__.__module__
         cls_name = self.__class__.__qualname__
