@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from sphinx.deprecation import RemovedInSphinx10Warning
-from sphinx.parsers import RSTParser
+from sphinx.parsers import Parser, RSTParser
 from sphinx.util.docutils import new_document
 
 if TYPE_CHECKING:
@@ -84,6 +84,10 @@ def test_parser_config_env_populated_by_registry(app: SphinxTestApp) -> None:
     parser = app.registry.create_source_parser(
         'restructuredtext', config=app.config, env=app.env
     )
+    # ``create_source_parser`` is typed as ``docutils.parsers.Parser``; narrow
+    # to the Sphinx base class so ``config`` / ``env`` access type-checks and
+    # so a future regression that stops wrapping Sphinx parsers is caught here.
+    assert isinstance(parser, Parser)
 
     with warnings.catch_warnings():
         warnings.simplefilter('error', RemovedInSphinx10Warning)
