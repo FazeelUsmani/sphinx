@@ -73,13 +73,29 @@ def test_RSTParser_prolog_epilog(RSTStateMachine: Mock, app: SphinxTestApp) -> N
 
 
 @pytest.mark.sphinx('html', testroot='basic')
-def test_parser_config_env_not_deprecated(app: SphinxTestApp) -> None:
-    """Reading ``Parser.config`` / ``Parser.env`` must not warn (#14371)."""
-    parser = RSTParser()
-    parser._config = app.config
-    parser._env = app.env
+def test_parser_config_env_populated_by_registry(app: SphinxTestApp) -> None:
+    """Parsers built via the registry expose config/env without warning (#14371).
+
+    This goes through the real construction path in
+    :meth:`.SphinxComponentRegistry.create_source_parser` so a regression in
+    that code path (for example, removal of the ``isinstance(..., SphinxParser)``
+    gate) would be caught here.
+    """
+    parser = app.registry.create_source_parser(
+        'restructuredtext', config=app.config, env=app.env
+    )
 
     with warnings.catch_warnings():
         warnings.simplefilter('error', RemovedInSphinx10Warning)
         assert parser.config is app.config
         assert parser.env is app.env
+
+
+@pytest.mark.sphinx('html', testroot='basic')
+def test_parser_set_application_still_deprecated(app: SphinxTestApp) -> None:
+    """``Parser.set_application`` must still emit a deprecation warning (#14371)."""
+    parser = RSTParser()
+    with pytest.warns(RemovedInSphinx10Warning, match='set_application'):
+        parser.set_application(app)
+    assert parser.config is app.config
+    assert parser.env is app.env

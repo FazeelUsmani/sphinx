@@ -38,9 +38,12 @@ class Parser(docutils.parsers.Parser):
     def config(self) -> Config:
         """The config object.
 
-        Sphinx sets this attribute when constructing the parser via
-        :meth:`.Sphinx.add_source_parser`, so it is available throughout
-        ``parse()``.
+        Populated by Sphinx when it instantiates a parser registered via
+        :meth:`.Sphinx.add_source_parser`, so this is available from the
+        start of ``parse()``.
+
+        .. versionchanged:: 9.2
+           No longer deprecated.
         """
         return self._config
 
@@ -48,21 +51,25 @@ class Parser(docutils.parsers.Parser):
     def env(self) -> BuildEnvironment:
         """The environment object.
 
-        Sphinx sets this attribute when constructing the parser via
-        :meth:`.Sphinx.add_source_parser`, so it is available throughout
-        ``parse()``.
+        Populated by Sphinx when it instantiates a parser registered via
+        :meth:`.Sphinx.add_source_parser`, so this is available from the
+        start of ``parse()``.
+
+        .. versionchanged:: 9.2
+           No longer deprecated.
         """
         return self._env
 
     def set_application(self, app: Sphinx) -> None:
-        """set_application will be called from Sphinx to set app and other instance variables
+        """Legacy compatibility hook for receiving the Sphinx application.
 
         :param sphinx.application.Sphinx app: Sphinx application object
 
-        .. versionchanged:: 9.0
-           Deprecated.  Sphinx now sets ``_config`` and ``_env`` directly
-           when the parser is created, so this hook is no longer needed.
-           It will be removed in Sphinx 10.
+        .. deprecated:: 9.0
+           Sphinx now makes ``config`` and ``env`` available on the parser
+           instance automatically, so custom parsers no longer need to
+           override this method to capture the application.  It will be
+           removed in Sphinx 10.
         """
         cls_module = self.__class__.__module__
         cls_name = self.__class__.__qualname__
