@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from sphinx.testing.util import SphinxTestApp
 
 
 @pytest.mark.sphinx('html', testroot='numfig-include')
-def test_numref_in_included_file_no_warning(app):
+def test_numref_in_included_file_no_warning(app: SphinxTestApp) -> None:
     """Test that numref works with included files without duplicate label warnings.
 
     When a file is included via the include directive and also processed as a
@@ -25,7 +32,7 @@ def test_numref_in_included_file_no_warning(app):
 
 
 @pytest.mark.sphinx('html', testroot='numfig-include', freshenv=True)
-def test_numref_in_included_file_correct_numbering(app):
+def test_numref_in_included_file_correct_numbering(app: SphinxTestApp) -> None:
     """Test that figure numbering is correct when files are included."""
     app.build()
 
@@ -44,7 +51,7 @@ def test_numref_in_included_file_correct_numbering(app):
 
 
 @pytest.mark.sphinx('html', testroot='numfig-include-duplicate', freshenv=True)
-def test_real_duplicate_label_still_warns(app):
+def test_real_duplicate_label_still_warns(app: SphinxTestApp) -> None:
     """Test that real duplicate labels (different source files) still produce warnings.
 
     When two separate documents (doc1.rst and doc2.rst) both define the same label,
@@ -54,13 +61,13 @@ def test_real_duplicate_label_still_warns(app):
     app.build()
     warnings = app.warning.getvalue()
 
-    # Should have Sphinx's duplicate label warning because this is a REAL duplicate
-    # (label 'shared-label' defined in both doc1.rst AND doc2.rst - different source files)
+    # Should have duplicate label warning because this is a REAL duplicate
+    # (label 'shared-label' defined in both doc1.rst AND doc2.rst)
     assert 'duplicate label shared-label' in warnings
 
 
 @pytest.mark.sphinx('html', testroot='numfig-include', freshenv=True)
-def test_incremental_build_no_stale_labels(app, tmp_path):
+def test_incremental_build_no_stale_labels(app: SphinxTestApp, tmp_path: Path) -> None:
     """Test that incremental builds work correctly with included files.
 
     When a document is rebuilt incrementally, the duplicate detection should
